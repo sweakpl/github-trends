@@ -1,4 +1,4 @@
-package com.sweak.githubtrends.ui.theme
+package com.sweak.githubtrends.core.designsystem.theme
 
 import android.app.Activity
 import android.os.Build

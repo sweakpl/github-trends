@@ -1,4 +1,4 @@
-package com.sweak.githubtrends.ui.theme
+package com.sweak.githubtrends.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
