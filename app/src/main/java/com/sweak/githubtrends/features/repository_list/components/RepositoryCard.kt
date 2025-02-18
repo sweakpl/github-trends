@@ -1,16 +1,22 @@
 package com.sweak.githubtrends.features.repository_list.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
@@ -20,7 +26,16 @@ fun RepositoryCard(
     repositoryPreviewWrapper: RepositoryPreviewWrapper,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline
+        ),
+        modifier = modifier
+    ) {
         Column(modifier = Modifier
             .padding(
                 horizontal = MaterialTheme.space.medium,
@@ -28,20 +43,32 @@ fun RepositoryCard(
             )
         ) {
             Row(
-                modifier.padding(bottom = MaterialTheme.space.small)
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = MaterialTheme.space.small)
             ) {
-                Text(text = repositoryPreviewWrapper.username)
+                Text(
+                    text = repositoryPreviewWrapper.username,
+                    style = MaterialTheme.typography.titleMedium
+                )
 
                 Text(
                     text = "/",
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(horizontal = MaterialTheme.space.xSmall)
                 )
 
-                Text(text = repositoryPreviewWrapper.name)
+                Text(
+                    text = repositoryPreviewWrapper.name,
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 18.sp
+                    )
+                )
             }
 
             Text(
                 text = repositoryPreviewWrapper.description,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(bottom = MaterialTheme.space.small)
             )
 
@@ -49,9 +76,15 @@ fun RepositoryCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = repositoryPreviewWrapper.totalStars.toString())
+                Text(
+                    text = repositoryPreviewWrapper.totalStars.toString(),
+                    style = MaterialTheme.typography.labelLarge
+                )
 
-                Text(text = repositoryPreviewWrapper.starsSince.toString())
+                Text(
+                    text = repositoryPreviewWrapper.starsSince.toString(),
+                    style = MaterialTheme.typography.labelLarge
+                )
             }
         }
     }
