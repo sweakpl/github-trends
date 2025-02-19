@@ -13,6 +13,7 @@ private val DarkColorScheme = darkColorScheme(
     onBackground = Color.White,
     surface = Color.Black,
     onSurface = Color.White,
+    onSurfaceVariant = Manatee,
     outline = BrightGray
 )
 
@@ -20,6 +21,7 @@ private val LightColorScheme = lightColorScheme(
     background = Color.White,
     onBackground = Bunker,
     surface = AquaHaze,
+    onSurfaceVariant = ShuttleGray,
     onSurface = Color.Black,
     outline = Geyser
 )

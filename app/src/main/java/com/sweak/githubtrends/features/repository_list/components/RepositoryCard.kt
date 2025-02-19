@@ -8,15 +8,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sweak.githubtrends.R
+import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
@@ -69,22 +73,47 @@ fun RepositoryCard(
             Text(
                 text = repositoryPreviewWrapper.description,
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = MaterialTheme.space.small)
+                modifier = Modifier.padding(bottom = MaterialTheme.space.small),
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = repositoryPreviewWrapper.totalStars.toString(),
-                    style = MaterialTheme.typography.labelLarge
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = GitHubTrendsIcons.Star,
+                        contentDescription = stringResource(R.string.content_description_star),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
 
-                Text(
-                    text = repositoryPreviewWrapper.starsSince.toString(),
-                    style = MaterialTheme.typography.labelLarge
-                )
+                    Text(
+                        text = repositoryPreviewWrapper.totalStars.toString(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = GitHubTrendsIcons.Growth,
+                        contentDescription = stringResource(R.string.content_description_growth),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = repositoryPreviewWrapper.starsSince.toString(),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }
@@ -93,7 +122,7 @@ fun RepositoryCard(
 @Preview
 @Composable
 private fun RepositoryCardPreview() {
-    GitHubTrendsTheme {
+    GitHubTrendsTheme(darkTheme = true) {
         RepositoryCard(
             repositoryPreviewWrapper = RepositoryPreviewWrapper(
                 name = "qralarm-android",

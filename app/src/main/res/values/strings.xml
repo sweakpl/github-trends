@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GitHubTrends</string>
     <string name="trending">Trending</string>
+    <string name="content_description_star">Star icon</string>
+    <string name="content_description_growth">Popularity growth icon</string>
+    <string name="content_description_github">GitHub icon</string>
 </resources>
