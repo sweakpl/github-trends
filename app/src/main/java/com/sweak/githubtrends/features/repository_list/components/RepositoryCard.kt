@@ -1,6 +1,7 @@
 package com.sweak.githubtrends.features.repository_list.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,91 +30,100 @@ import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWr
 @Composable
 fun RepositoryCard(
     repositoryPreviewWrapper: RepositoryPreviewWrapper,
+    onClick: (repositoryId: Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.background
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.outline
-        ),
+    // Wrapping the Card with Surface to prevent the click ripple effect leak outside of the Card:
+    Surface(
+        shape = MaterialTheme.shapes.medium,
         modifier = modifier
     ) {
-        Column(modifier = Modifier
-            .padding(
-                horizontal = MaterialTheme.space.medium,
-                vertical = MaterialTheme.space.smallMedium
-            )
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(bottom = MaterialTheme.space.small)
-            ) {
-                Text(
-                    text = repositoryPreviewWrapper.username,
-                    style = MaterialTheme.typography.titleMedium
-                )
-
-                Text(
-                    text = "/",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(horizontal = MaterialTheme.space.xSmall)
-                )
-
-                Text(
-                    text = repositoryPreviewWrapper.name,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp
-                    )
-                )
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background
+            ),
+            border = BorderStroke(
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.outline
+            ),
+            modifier = Modifier.clickable {
+                onClick(repositoryPreviewWrapper.id)
             }
-
-            Text(
-                text = repositoryPreviewWrapper.description,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(bottom = MaterialTheme.space.small),
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier
+                .padding(
+                    horizontal = MaterialTheme.space.medium,
+                    vertical = MaterialTheme.space.smallMedium
+                )
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(bottom = MaterialTheme.space.small)
                 ) {
-                    Icon(
-                        imageVector = GitHubTrendsIcons.Star,
-                        contentDescription = stringResource(R.string.content_description_star),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    Text(
+                        text = repositoryPreviewWrapper.username,
+                        style = MaterialTheme.typography.titleMedium
                     )
 
                     Text(
-                        text = repositoryPreviewWrapper.totalStars.toString(),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = "/",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.space.xSmall)
+                    )
+
+                    Text(
+                        text = repositoryPreviewWrapper.name,
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 18.sp
+                        )
                     )
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = GitHubTrendsIcons.Growth,
-                        contentDescription = stringResource(R.string.content_description_growth),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                Text(
+                    text = repositoryPreviewWrapper.description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = MaterialTheme.space.small),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-                    Text(
-                        text = repositoryPreviewWrapper.starsSince.toString(),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = GitHubTrendsIcons.Star,
+                            contentDescription = stringResource(R.string.content_description_star),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        Text(
+                            text = repositoryPreviewWrapper.totalStars.toString(),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = GitHubTrendsIcons.Growth,
+                            contentDescription = stringResource(R.string.content_description_growth),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        Text(
+                            text = repositoryPreviewWrapper.starsSince.toString(),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                 }
             }
         }
@@ -125,12 +136,14 @@ private fun RepositoryCardPreview() {
     GitHubTrendsTheme(darkTheme = true) {
         RepositoryCard(
             repositoryPreviewWrapper = RepositoryPreviewWrapper(
+                id = 0,
                 name = "qralarm-android",
                 username = "sweakpl",
                 description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
                 totalStars = 177,
                 starsSince = 3
-            )
+            ),
+            onClick = { /* no-op */ }
         )
     }
 }

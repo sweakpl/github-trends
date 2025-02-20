@@ -26,11 +26,14 @@ import com.sweak.githubtrends.features.repository_list.components.RepositoryCard
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
 
 @Composable
-fun RepositoryListScreen() {
+fun RepositoryListScreen(
+    onRepositoryClicked: (repositoryId: Long) -> Unit
+) {
     RepositoryListScreenContent(
         state = RepositoryListScreenState(
             repositories = listOf(
                 RepositoryPreviewWrapper(
+                    id = 0,
                     name = "qralarm-android",
                     username = "sweakpl",
                     description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -38,6 +41,7 @@ fun RepositoryListScreen() {
                     starsSince = 3
                 ),
                 RepositoryPreviewWrapper(
+                    id = 0,
                     name = "qralarm-android",
                     username = "sweakpl",
                     description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -45,6 +49,7 @@ fun RepositoryListScreen() {
                     starsSince = 3
                 ),
                 RepositoryPreviewWrapper(
+                    id = 0,
                     name = "qralarm-android",
                     username = "sweakpl",
                     description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -52,14 +57,22 @@ fun RepositoryListScreen() {
                     starsSince = 3
                 )
             )
-        )
+        ),
+        onEvent = { event ->
+            when (event) {
+                is RepositoryListScreenUserEvent.RepositoryClicked -> {
+                    onRepositoryClicked(event.repositoryId)
+                }
+            }
+        }
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RepositoryListScreenContent(
-    state: RepositoryListScreenState
+    state: RepositoryListScreenState,
+    onEvent: (RepositoryListScreenUserEvent) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -88,8 +101,17 @@ private fun RepositoryListScreenContent(
             contentPadding = PaddingValues(all = MaterialTheme.space.medium),
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
-            items(state.repositories) {
-                RepositoryCard(repositoryPreviewWrapper = it)
+            items(state.repositories) { repositoryPreviewWrapper ->
+                RepositoryCard(
+                    repositoryPreviewWrapper = repositoryPreviewWrapper,
+                    onClick = { repositoryId ->
+                        onEvent(
+                            RepositoryListScreenUserEvent.RepositoryClicked(
+                                repositoryId = repositoryId
+                            )
+                        )
+                    }
+                )
             }
         }
     }
@@ -103,6 +125,7 @@ private fun RepositoryListScreenContentPreview() {
             state = RepositoryListScreenState(
                 repositories = listOf(
                     RepositoryPreviewWrapper(
+                        id = 0,
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -110,6 +133,7 @@ private fun RepositoryListScreenContentPreview() {
                         starsSince = 3
                     ),
                     RepositoryPreviewWrapper(
+                        id = 0,
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -117,6 +141,7 @@ private fun RepositoryListScreenContentPreview() {
                         starsSince = 3
                     ),
                     RepositoryPreviewWrapper(
+                        id = 0,
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -124,7 +149,8 @@ private fun RepositoryListScreenContentPreview() {
                         starsSince = 3
                     )
                 )
-            )
+            ),
+            onEvent = { /* no-op */ }
         )
     }
 }

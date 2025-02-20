@@ -30,7 +30,9 @@ import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
 
 @Composable
-fun RepositoryDetailsScreen() {
+fun RepositoryDetailsScreen(
+    onBackClicked: () -> Unit
+) {
     RepositoryDetailsScreenContent(
         state = RepositoryDetailsScreenState(
             repositoryDetailsWrapper = RepositoryDetailsWrapper(
@@ -44,7 +46,7 @@ fun RepositoryDetailsScreen() {
         onEvent = { event ->
             when (event) {
                 is RepositoryDetailsScreenUserEvent.BackClicked -> {
-                    // TODO
+                    onBackClicked()
                 }
             }
         }
