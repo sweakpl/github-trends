@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 object RepositoryListRoute
 
 fun NavGraphBuilder.repositoryListScreen(
-    onRepositoryClicked: (repositoryId: Long) -> Unit
+    onRepositoryClicked: (repositoryId: String) -> Unit
 ) {
     composable<RepositoryListRoute> {
         RepositoryListScreen(

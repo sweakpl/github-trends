@@ -8,11 +8,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RepositoryDetailsRoute(
-    val repositoryId: Long
+    val repositoryId: String
 )
 
 fun NavController.navigateToRepositoryDetails(
-    repositoryId: Long
+    repositoryId: String
 ) = navigate(
     route = RepositoryDetailsRoute(
         repositoryId = repositoryId

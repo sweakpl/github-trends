@@ -11,7 +11,9 @@ import com.sweak.githubtrends.features.repository_details.navigation.navigateToR
 import com.sweak.githubtrends.features.repository_details.navigation.repositoryDetailsScreen
 import com.sweak.githubtrends.features.repository_list.navigation.RepositoryListRoute
 import com.sweak.githubtrends.features.repository_list.navigation.repositoryListScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

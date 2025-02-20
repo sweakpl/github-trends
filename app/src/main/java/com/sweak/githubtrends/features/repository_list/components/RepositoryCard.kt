@@ -30,7 +30,7 @@ import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWr
 @Composable
 fun RepositoryCard(
     repositoryPreviewWrapper: RepositoryPreviewWrapper,
-    onClick: (repositoryId: Long) -> Unit,
+    onClick: (repositoryId: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     // Wrapping the Card with Surface to prevent the click ripple effect leak outside of the Card:
@@ -136,7 +136,7 @@ private fun RepositoryCardPreview() {
     GitHubTrendsTheme(darkTheme = true) {
         RepositoryCard(
             repositoryPreviewWrapper = RepositoryPreviewWrapper(
-                id = 0,
+                id = "sweakpl/qralarm-android",
                 name = "qralarm-android",
                 username = "sweakpl",
                 description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",

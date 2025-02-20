@@ -19,8 +19,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
@@ -30,9 +30,9 @@ import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWr
 
 @Composable
 fun RepositoryListScreen(
-    onRepositoryClicked: (repositoryId: Long) -> Unit
+    onRepositoryClicked: (repositoryId: String) -> Unit
 ) {
-    val repositoryListViewModel: RepositoryListViewModel = viewModel()
+    val repositoryListViewModel: RepositoryListViewModel = hiltViewModel()
     val repositoryListScreenState by repositoryListViewModel.state.collectAsStateWithLifecycle()
 
     RepositoryListScreenContent(
@@ -104,7 +104,7 @@ private fun RepositoryListScreenContentPreview() {
             state = RepositoryListScreenState(
                 repositories = listOf(
                     RepositoryPreviewWrapper(
-                        id = 0,
+                        id = "sweakpl/qralarm-android",
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -112,7 +112,7 @@ private fun RepositoryListScreenContentPreview() {
                         starsSince = 3
                     ),
                     RepositoryPreviewWrapper(
-                        id = 0,
+                        id = "sweakpl/qralarm-android",
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -120,7 +120,7 @@ private fun RepositoryListScreenContentPreview() {
                         starsSince = 3
                     ),
                     RepositoryPreviewWrapper(
-                        id = 0,
+                        id = "sweakpl/qralarm-android",
                         name = "qralarm-android",
                         username = "sweakpl",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
