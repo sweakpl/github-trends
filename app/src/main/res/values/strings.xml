@@ -4,4 +4,6 @@
     <string name="content_description_star">Star icon</string>
     <string name="content_description_growth">Popularity growth icon</string>
     <string name="content_description_github">GitHub icon</string>
+    <string name="repository">Repository</string>
+    <string name="content_description_back_arrow">Back arrow icon</string>
 </resources>
