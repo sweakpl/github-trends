@@ -11,4 +11,8 @@
     <string name="unknown_error">An unknown error occurred.</string>
     <string name="content_description_error">Error icon</string>
     <string name="try_again">Try again</string>
+    <string name="content_description_repository_owner_avatar">Avatar of the repository owner</string>
+    <string name="content_description_fork">GitHub fork icon</string>
+    <string name="see_on_github">See on GitHub</string>
+    <string name="issue_opening_the_page">There was an issue opening the page.</string>
 </resources>

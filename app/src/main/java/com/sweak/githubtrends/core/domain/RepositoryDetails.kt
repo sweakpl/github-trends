@@ -5,7 +5,7 @@ data class RepositoryDetails(
     val url: String,
     val name: String,
     val author: String,
-    val authorAvatarId: String,
+    val authorAvatarUrl: String,
     val description: String?,
     val stars: Int,
     val language: String?,

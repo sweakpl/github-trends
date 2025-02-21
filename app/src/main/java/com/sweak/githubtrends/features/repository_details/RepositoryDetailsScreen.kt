@@ -1,16 +1,25 @@
 package com.sweak.githubtrends.features.repository_details
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,17 +32,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.core.ui.components.ErrorState
+import com.sweak.githubtrends.core.ui.util.LanguageColors
 import com.sweak.githubtrends.core.ui.util.UiState
 import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
 
@@ -44,12 +57,30 @@ fun RepositoryDetailsScreen(
     val repositoryDetailsViewModel: RepositoryDetailsViewModel = hiltViewModel()
     val repositoryDetailsScreenState by repositoryDetailsViewModel.state.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+
     RepositoryDetailsScreenContent(
         state = repositoryDetailsScreenState,
         onEvent = { event ->
             when (event) {
                 is RepositoryDetailsScreenUserEvent.BackClicked -> {
                     onBackClicked()
+                }
+                is RepositoryDetailsScreenUserEvent.OpenGitHubClicked -> {
+                    try {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(event.repositoryUrl)
+                            )
+                        )
+                    } catch (activityNotFoundException: ActivityNotFoundException) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.issue_opening_the_page),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
                 else -> {
                     repositoryDetailsViewModel.onEvent(event)
@@ -59,7 +90,7 @@ fun RepositoryDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 private fun RepositoryDetailsScreenContent(
     state: RepositoryDetailsScreenState,
@@ -103,39 +134,78 @@ private fun RepositoryDetailsScreenContent(
                         ) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(bottom = MaterialTheme.space.medium)
+                                modifier = Modifier.padding(bottom = MaterialTheme.space.small)
                             ) {
+                                AsyncImage(
+                                    model = repositoryDetailsUiState.data.usernameAvatarUrl,
+                                    contentDescription = stringResource(
+                                        R.string.content_description_repository_owner_avatar
+                                    ),
+                                    modifier = Modifier.size(size = MaterialTheme.space.large)
+                                )
+
                                 Text(
                                     text = repositoryDetailsUiState.data.username,
-                                    style = MaterialTheme.typography.headlineSmall
-                                )
-
-                                Text(
-                                    text = "/",
                                     style = MaterialTheme.typography.headlineSmall,
-                                    modifier = Modifier.padding(horizontal = MaterialTheme.space.xSmall)
-                                )
-
-                                Text(
-                                    text = repositoryDetailsUiState.data.name,
-                                    style = MaterialTheme.typography.headlineSmall.copy(
-                                        fontWeight = FontWeight.SemiBold,
-                                        fontSize = 28.sp
-                                    )
+                                    modifier = Modifier.padding(start = MaterialTheme.space.small)
                                 )
                             }
 
                             Text(
-                                text = repositoryDetailsUiState.data.description,
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(bottom = MaterialTheme.space.medium),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                text = repositoryDetailsUiState.data.name,
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 28.sp
+                                ),
+                                modifier = Modifier
+                                    .padding(bottom = MaterialTheme.space.mediumLarge)
                             )
 
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                modifier = Modifier.fillMaxWidth()
+                            if (repositoryDetailsUiState.data.description != null) {
+                                Text(
+                                    text = repositoryDetailsUiState.data.description,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    modifier = Modifier.padding(bottom = MaterialTheme.space.medium),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+
+                            FlowRow(
+                                horizontalArrangement =
+                                Arrangement.spacedBy(MaterialTheme.space.large),
+                                verticalArrangement =
+                                Arrangement.spacedBy(MaterialTheme.space.smallMedium),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = MaterialTheme.space.mediumLarge)
                             ) {
+                                if (repositoryDetailsUiState.data.language != null) {
+                                    Row(
+                                        horizontalArrangement =
+                                        Arrangement.spacedBy(MaterialTheme.space.small),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        LanguageColors[repositoryDetailsUiState.data.language]?.let {
+                                            Box(
+                                                modifier = Modifier
+                                                    .size(
+                                                        size = MaterialTheme.space.run {
+                                                            medium + xSmall
+                                                        }
+                                                    )
+                                                    .clip(shape = CircleShape)
+                                                    .background(color = it)
+                                            )
+                                        }
+
+                                        Text(
+                                            text = repositoryDetailsUiState.data.language,
+                                            style = MaterialTheme.typography.headlineSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+
                                 Row(
                                     horizontalArrangement = Arrangement.spacedBy(
                                         space = MaterialTheme.space.xSmall
@@ -165,23 +235,54 @@ private fun RepositoryDetailsScreenContent(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Icon(
-                                        imageVector = GitHubTrendsIcons.Growth,
+                                        imageVector = GitHubTrendsIcons.Fork,
                                         contentDescription = stringResource(
-                                            R.string.content_description_growth
+                                            R.string.content_description_fork
                                         ),
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(size = MaterialTheme.space.large)
                                     )
 
                                     Text(
-                                        text = repositoryDetailsUiState.data.starsSince.toString(),
+                                        text = repositoryDetailsUiState.data.forks.toString(),
                                         style = MaterialTheme.typography.headlineSmall,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
                             }
+
+                            Button(
+                                onClick = {
+                                    onEvent(
+                                        RepositoryDetailsScreenUserEvent.OpenGitHubClicked(
+                                            repositoryUrl = repositoryDetailsUiState.data.url
+                                        )
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Row(
+                                    horizontalArrangement =
+                                    Arrangement.spacedBy(MaterialTheme.space.smallMedium),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Icon(
+                                        imageVector = GitHubTrendsIcons.GitHub,
+                                        contentDescription =
+                                        stringResource(R.string.content_description_github),
+                                        modifier = Modifier
+                                            .size(size = MaterialTheme.space.large)
+                                    )
+
+                                    Text(
+                                        text = stringResource(R.string.see_on_github),
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+                            }
                         }
                     }
+
                     is UiState.Loading -> {
                         Box(modifier = Modifier.size(size = MaterialTheme.space.xLarge)) {
                             CircularProgressIndicator(
@@ -189,6 +290,7 @@ private fun RepositoryDetailsScreenContent(
                             )
                         }
                     }
+
                     is UiState.Error -> {
                         ErrorState(
                             errorMessage = repositoryDetailsUiState.errorMessage.asString(),
@@ -216,9 +318,12 @@ private fun RepositoryDetailsScreenContentPreview() {
                     RepositoryDetailsWrapper(
                         name = "qralarm-android",
                         username = "sweakpl",
+                        usernameAvatarUrl = "https://avatars.githubusercontent.com/u/70141120?v=4",
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
                         totalStars = 177,
-                        starsSince = 3
+                        language = "Kotlin",
+                        forks = 14,
+                        url = "https://github.com/sweakpl/qralarm-android"
                     )
                 )
             ),

@@ -12,6 +12,7 @@ import com.sweak.githubtrends.R
 
 object GitHubTrendsIcons {
     val GitHub @Composable get() = ImageVector.vectorResource(R.drawable.ic_github)
+    val Fork @Composable get() = ImageVector.vectorResource(R.drawable.ic_fork)
 
     val Star = Icons.Outlined.Star
     val Growth = Icons.AutoMirrored.Filled.TrendingUp

@@ -60,9 +60,12 @@ class RepositoryDetailsViewModel @Inject constructor(
                         RepositoryDetailsWrapper(
                             name = repositoryDetailsResult.data.name,
                             username = repositoryDetailsResult.data.author,
-                            description = repositoryDetailsResult.data.description ?: "", // TODO: handle no description
+                            usernameAvatarUrl = repositoryDetailsResult.data.authorAvatarUrl,
+                            description = repositoryDetailsResult.data.description,
                             totalStars = repositoryDetailsResult.data.stars,
-                            starsSince = 3 // TODO: remove stars since
+                            language = repositoryDetailsResult.data.language,
+                            forks = repositoryDetailsResult.data.forks,
+                            url = repositoryDetailsResult.data.url
                         )
                     )
                 )

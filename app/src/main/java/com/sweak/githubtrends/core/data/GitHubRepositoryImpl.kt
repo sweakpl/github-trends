@@ -70,7 +70,7 @@ class GitHubRepositoryImpl @Inject constructor(
                         url = result.data.htmlUrl,
                         name = result.data.name,
                         author = result.data.owner.login,
-                        authorAvatarId = result.data.owner.avatarUrl,
+                        authorAvatarUrl = result.data.owner.avatarUrl,
                         description = result.data.description,
                         stars = result.data.stargazersCount,
                         language = result.data.language,
