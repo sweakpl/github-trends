@@ -1,37 +1,51 @@
-package com.sweak.githubtrends.core.network.trending
+package com.sweak.githubtrends.core.network.details
 
 import com.sweak.githubtrends.core.domain.util.Result
-import com.sweak.githubtrends.core.network.trending.model.TrendingGitHubRepositoryDto
+import com.sweak.githubtrends.core.network.details.model.GitHubRepositoryDetailsDto
 import com.sweak.githubtrends.core.network.util.GitHubRepositoriesNetworkError
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 import java.io.InterruptedIOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-private interface GitHubTrendingRepositoriesApi {
-    @GET("/repositories")
-    suspend fun getTrendingRepositories(): Response<List<TrendingGitHubRepositoryDto>>
+private interface GitHubRepositoryDetailsApi {
+    @GET("/repos/{owner}/{repo}")
+    suspend fun getRepositoryDetails(
+        @Path("owner") ownerName: String,
+        @Path("repo") repositoryName: String,
+    ): Response<GitHubRepositoryDetailsDto>
 }
 
-class GitHubTrendingRepositoriesNetwork @Inject constructor() {
-    private val gitHubTrendingRepositoriesApi = Retrofit.Builder()
-        .baseUrl("https://api.gitterapp.com")
+class GitHubRepositoryDetailsNetwork @Inject constructor() {
+    private val gitHubRepositoryDetailsApi = Retrofit.Builder()
+        .baseUrl("https://api.github.com")
         .client(OkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-        .create(GitHubTrendingRepositoriesApi::class.java)
+        .create(GitHubRepositoryDetailsApi::class.java)
 
-    suspend fun getTrendingRepositories(): Result<List<TrendingGitHubRepositoryDto>, GitHubRepositoriesNetworkError> {
-        val response: Response<List<TrendingGitHubRepositoryDto>>
+    suspend fun getRepositoryDetails(
+        repositoryId: String
+    ): Result<GitHubRepositoryDetailsDto, GitHubRepositoriesNetworkError> {
+        val response: Response<GitHubRepositoryDetailsDto>
 
         try {
-            response = gitHubTrendingRepositoriesApi.getTrendingRepositories()
+            val (ownerName, repositoryName) = repositoryId.split("/").let {
+                require(it.size == 2)
+                it[0] to it[1]
+            }
+
+            response = gitHubRepositoryDetailsApi.getRepositoryDetails(
+                ownerName = ownerName,
+                repositoryName = repositoryName
+            )
         } catch (exception: Exception) {
             return when (exception) {
                 is ConnectException, is SocketTimeoutException ->

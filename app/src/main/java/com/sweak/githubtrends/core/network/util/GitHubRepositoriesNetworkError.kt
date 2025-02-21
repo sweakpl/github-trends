@@ -1,8 +1,8 @@
-package com.sweak.githubtrends.core.network.trending
+package com.sweak.githubtrends.core.network.util
 
 import com.sweak.githubtrends.core.domain.util.Error
 
-enum class GitHubTrendingRepositoriesNetworkError : Error {
+enum class GitHubRepositoriesNetworkError : Error {
     NO_INTERNET,
     CONNECTION_ERROR,
     INTERRUPTED,

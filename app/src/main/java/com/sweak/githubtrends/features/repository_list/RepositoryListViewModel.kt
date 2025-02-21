@@ -19,6 +19,8 @@ class RepositoryListViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            // TODO: handle loading and error states
+
             val trendingRepositoriesResult = gitHubRepository.getTrendingRepositories()
 
             if (trendingRepositoriesResult is Result.Success) {
@@ -29,7 +31,7 @@ class RepositoryListViewModel @Inject constructor(
                                 id = it.id,
                                 name = it.name,
                                 username = it.author,
-                                description = it.description ?: "",
+                                description = it.description ?: "", // TODO: handle no description
                                 totalStars = it.stars,
                                 starsSince = it.starsSince
                             )

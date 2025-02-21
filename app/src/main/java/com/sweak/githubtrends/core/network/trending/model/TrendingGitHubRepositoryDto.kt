@@ -1,4 +1,4 @@
-package com.sweak.githubtrends.core.network.trending
+package com.sweak.githubtrends.core.network.trending.model
 
 import androidx.annotation.Keep
 

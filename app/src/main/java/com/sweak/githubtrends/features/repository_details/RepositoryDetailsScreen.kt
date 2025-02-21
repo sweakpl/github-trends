@@ -24,8 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
@@ -36,7 +36,7 @@ import com.sweak.githubtrends.features.repository_details.model.RepositoryDetail
 fun RepositoryDetailsScreen(
     onBackClicked: () -> Unit
 ) {
-    val repositoryDetailsViewModel: RepositoryDetailsViewModel = viewModel()
+    val repositoryDetailsViewModel: RepositoryDetailsViewModel = hiltViewModel()
     val repositoryDetailsScreenState by repositoryDetailsViewModel.state.collectAsStateWithLifecycle()
 
     RepositoryDetailsScreenContent(
