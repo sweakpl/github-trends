@@ -6,4 +6,9 @@
     <string name="content_description_github">GitHub icon</string>
     <string name="repository">Repository</string>
     <string name="content_description_back_arrow">Back arrow icon</string>
+    <string name="connection_error">There was a connection problem. Check your internet and try again.</string>
+    <string name="server_error">The server had a problem processing the request. You can try again later.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="content_description_error">Error icon</string>
+    <string name="try_again">Try again</string>
 </resources>

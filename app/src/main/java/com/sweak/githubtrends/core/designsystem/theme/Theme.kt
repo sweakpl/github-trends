@@ -9,6 +9,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorScheme = darkColorScheme(
+    primary = Color.White,
     background = Bunker,
     onBackground = Color.White,
     surface = Color.Black,
@@ -18,6 +19,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
+    primary = Bunker,
     background = Color.White,
     onBackground = Bunker,
     surface = AquaHaze,
