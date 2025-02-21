@@ -1,12 +1,16 @@
 package com.sweak.githubtrends.features.repository_list.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -16,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,6 +30,7 @@ import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
+import com.sweak.githubtrends.core.ui.util.LanguageColors
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
 
 @Composable
@@ -80,17 +86,43 @@ fun RepositoryCard(
                     )
                 }
 
-                Text(
-                    text = repositoryPreviewWrapper.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(bottom = MaterialTheme.space.small),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                if (repositoryPreviewWrapper.description != null) {
+                    Text(
+                        text = repositoryPreviewWrapper.description,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(bottom = MaterialTheme.space.small),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
 
                 Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.mediumLarge),
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    if (repositoryPreviewWrapper.language != null) {
+                        Row(
+                            horizontalArrangement =
+                            Arrangement.spacedBy(MaterialTheme.space.xSmall),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            LanguageColors[repositoryPreviewWrapper.language]?.let {
+                                Box(
+                                    modifier = Modifier
+                                        .size(size = MaterialTheme.space.smallMedium)
+                                        .clip(shape = CircleShape)
+                                        .background(color = it)
+                                )
+                            }
+
+                            Text(
+                                text = repositoryPreviewWrapper.language,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.xSmall),
                         verticalAlignment = Alignment.CenterVertically
@@ -140,6 +172,7 @@ private fun RepositoryCardPreview() {
                 name = "qralarm-android",
                 username = "sweakpl",
                 description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
+                language = "Kotlin",
                 totalStars = 177,
                 starsSince = 3
             ),

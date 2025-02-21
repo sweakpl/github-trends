@@ -151,6 +151,7 @@ private fun RepositoryListScreenContentPreview() {
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
+                            language = "Kotlin",
                             totalStars = 177,
                             starsSince = 3
                         ),
@@ -159,6 +160,7 @@ private fun RepositoryListScreenContentPreview() {
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
+                            language = "Kotlin",
                             totalStars = 177,
                             starsSince = 3
                         ),
@@ -167,6 +169,7 @@ private fun RepositoryListScreenContentPreview() {
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
+                            language = "Kotlin",
                             totalStars = 177,
                             starsSince = 3
                         )

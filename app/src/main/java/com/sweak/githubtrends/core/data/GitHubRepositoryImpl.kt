@@ -35,6 +35,7 @@ class GitHubRepositoryImpl @Inject constructor(
                             name = trendingGitHubRepositoryDto.name,
                             author = trendingGitHubRepositoryDto.author,
                             description = trendingGitHubRepositoryDto.description,
+                            language = trendingGitHubRepositoryDto.language,
                             stars = trendingGitHubRepositoryDto.stars,
                             starsSince = trendingGitHubRepositoryDto.currentPeriodStars
                         )

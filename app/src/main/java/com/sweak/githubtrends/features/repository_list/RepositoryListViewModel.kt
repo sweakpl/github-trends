@@ -46,7 +46,16 @@ class RepositoryListViewModel @Inject constructor(
         val trendingRepositoriesResult = gitHubRepository.getTrendingRepositories()
 
         if (trendingRepositoriesResult is Result.Success) {
-            // TODO: handle empty data (sometimes it can happen)
+            if (trendingRepositoriesResult.data.isEmpty()) {
+                _state.update { currentState ->
+                    currentState.copy(
+                        repositoriesUiState = UiState.Error(
+                            errorMessage = UiText.StringResource(R.string.unknown_error)
+                        )
+                    )
+                }
+                return@launch
+            }
 
             _state.update { currentState ->
                 currentState.copy(
@@ -56,8 +65,8 @@ class RepositoryListViewModel @Inject constructor(
                                 id = it.id,
                                 name = it.name,
                                 username = it.author,
-                                description = it.description
-                                    ?: "", // TODO: handle no description
+                                description = it.description,
+                                language = it.language,
                                 totalStars = it.stars,
                                 starsSince = it.starsSince
                             )
