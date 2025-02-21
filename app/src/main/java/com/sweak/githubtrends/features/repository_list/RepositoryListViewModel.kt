@@ -33,53 +33,51 @@ class RepositoryListViewModel @Inject constructor(
         loadData()
     }
 
-    private fun loadData() {
-        viewModelScope.launch {
+    private fun loadData() = viewModelScope.launch {
+        _state.update { currentState ->
+            currentState.copy(
+                repositoriesUiState = UiState.Loading
+            )
+        }
+
+        // Half a second delay to prevent abrupt UI state changes:
+        delay(500)
+
+        val trendingRepositoriesResult = gitHubRepository.getTrendingRepositories()
+
+        if (trendingRepositoriesResult is Result.Success) {
+            // TODO: handle empty data (sometimes it can happen)
+
             _state.update { currentState ->
                 currentState.copy(
-                    repositoriesUiState = UiState.Loading
+                    repositoriesUiState = UiState.Success(
+                        trendingRepositoriesResult.data.map {
+                            RepositoryPreviewWrapper(
+                                id = it.id,
+                                name = it.name,
+                                username = it.author,
+                                description = it.description
+                                    ?: "", // TODO: handle no description
+                                totalStars = it.stars,
+                                starsSince = it.starsSince
+                            )
+                        }
+                    )
                 )
             }
-
-            // Half a second delay to prevent abrupt UI state changes:
-            delay(500)
-
-            val trendingRepositoriesResult = gitHubRepository.getTrendingRepositories()
-
-            if (trendingRepositoriesResult is Result.Success) {
-                // TODO: handle empty data (sometimes it can happen)
-
-                _state.update { currentState ->
-                    currentState.copy(
-                        repositoriesUiState = UiState.Success(
-                            trendingRepositoriesResult.data.map {
-                                RepositoryPreviewWrapper(
-                                    id = it.id,
-                                    name = it.name,
-                                    username = it.author,
-                                    description = it.description
-                                        ?: "", // TODO: handle no description
-                                    totalStars = it.stars,
-                                    starsSince = it.starsSince
-                                )
+        } else if (trendingRepositoriesResult is Result.Error) {
+            _state.update { currentState ->
+                currentState.copy(
+                    repositoriesUiState = UiState.Error(
+                        errorMessage = UiText.StringResource(
+                            when (trendingRepositoriesResult.error) {
+                                GitHubError.CONNECTION_ERROR -> R.string.connection_error
+                                GitHubError.SERVER_ERROR -> R.string.server_error
+                                GitHubError.UNKNOWN -> R.string.unknown_error
                             }
                         )
                     )
-                }
-            } else if (trendingRepositoriesResult is Result.Error) {
-                _state.update { currentState ->
-                    currentState.copy(
-                        repositoriesUiState = UiState.Error(
-                            errorMessage = UiText.StringResource(
-                                when (trendingRepositoriesResult.error) {
-                                    GitHubError.CONNECTION_ERROR -> R.string.connection_error
-                                    GitHubError.SERVER_ERROR -> R.string.server_error
-                                    GitHubError.UNKNOWN -> R.string.unknown_error
-                                }
-                            )
-                        )
-                    )
-                }
+                )
             }
         }
     }
