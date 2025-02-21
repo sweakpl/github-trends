@@ -1,6 +1,7 @@
 package com.sweak.githubtrends.core.network.trending
 
 import com.sweak.githubtrends.core.domain.util.Result
+import com.sweak.githubtrends.core.network.TRENDING_REPOSITORIES_API_URL
 import com.sweak.githubtrends.core.network.trending.model.TrendingGitHubRepositoryDto
 import com.sweak.githubtrends.core.network.util.GitHubRepositoriesNetworkError
 import okhttp3.OkHttpClient
@@ -21,7 +22,7 @@ private interface GitHubTrendingRepositoriesApi {
 
 class GitHubTrendingRepositoriesNetwork @Inject constructor() {
     private val gitHubTrendingRepositoriesApi = Retrofit.Builder()
-        .baseUrl("https://api.gitterapp.com")
+        .baseUrl(TRENDING_REPOSITORIES_API_URL)
         .client(OkHttpClient())
         .addConverterFactory(GsonConverterFactory.create())
         .build()
