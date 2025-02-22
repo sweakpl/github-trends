@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.sweak.githubtrends.R
-import com.sweak.githubtrends.core.domain.GitHubError
-import com.sweak.githubtrends.core.domain.GitHubRepository
+import com.sweak.githubtrends.core.domain.github.GitHubError
+import com.sweak.githubtrends.core.domain.github.GitHubRepository
 import com.sweak.githubtrends.core.domain.util.Result
 import com.sweak.githubtrends.core.ui.util.UiState
 import com.sweak.githubtrends.core.ui.util.UiText

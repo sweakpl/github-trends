@@ -31,6 +31,7 @@ import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
+import com.sweak.githubtrends.core.domain.user.UiThemeMode
 import com.sweak.githubtrends.core.ui.util.LanguageColors
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
 
@@ -168,7 +169,7 @@ fun RepositoryCard(
 @Preview
 @Composable
 private fun RepositoryCardPreview() {
-    GitHubTrendsTheme(darkTheme = true) {
+    GitHubTrendsTheme(uiThemeMode = UiThemeMode.DARK) {
         RepositoryCard(
             repositoryPreviewWrapper = RepositoryPreviewWrapper(
                 id = "sweakpl/qralarm-android",

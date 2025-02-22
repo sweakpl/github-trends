@@ -1,9 +1,9 @@
-package com.sweak.githubtrends.core.data
+package com.sweak.githubtrends.core.data.github
 
-import com.sweak.githubtrends.core.domain.GitHubError
-import com.sweak.githubtrends.core.domain.GitHubRepository
-import com.sweak.githubtrends.core.domain.RepositoryDetails
-import com.sweak.githubtrends.core.domain.TrendingRepository
+import com.sweak.githubtrends.core.domain.github.GitHubError
+import com.sweak.githubtrends.core.domain.github.GitHubRepository
+import com.sweak.githubtrends.core.domain.github.RepositoryDetails
+import com.sweak.githubtrends.core.domain.github.TrendingRepository
 import com.sweak.githubtrends.core.domain.util.Result
 import com.sweak.githubtrends.core.network.details.GitHubRepositoryDetailsNetwork
 import com.sweak.githubtrends.core.network.trending.GitHubTrendingRepositoriesNetwork

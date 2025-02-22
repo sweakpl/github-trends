@@ -3,8 +3,10 @@ package com.sweak.githubtrends.features.repository_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sweak.githubtrends.R
-import com.sweak.githubtrends.core.domain.GitHubError
-import com.sweak.githubtrends.core.domain.GitHubRepository
+import com.sweak.githubtrends.core.domain.github.GitHubError
+import com.sweak.githubtrends.core.domain.github.GitHubRepository
+import com.sweak.githubtrends.core.domain.user.UiThemeMode
+import com.sweak.githubtrends.core.domain.user.UserDataRepository
 import com.sweak.githubtrends.core.domain.util.Result
 import com.sweak.githubtrends.core.ui.util.UiState
 import com.sweak.githubtrends.core.ui.util.UiText
@@ -19,17 +21,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RepositoryListViewModel @Inject constructor(
-    private val gitHubRepository: GitHubRepository
+    private val gitHubRepository: GitHubRepository,
+    private val userDataRepository: UserDataRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(
-        RepositoryListScreenState(
-            repositoriesUiState = UiState.Loading
-        )
-    )
+    private val _state = MutableStateFlow(RepositoryListScreenState())
     val state = _state.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            userDataRepository.uiThemeModeFlow.collect {
+                _state.update { currentState ->
+                    currentState.copy(uiThemeMode = it)
+                }
+            }
+        }
+
         loadData()
     }
 
@@ -95,6 +102,14 @@ class RepositoryListViewModel @Inject constructor(
         when (event) {
             is RepositoryListScreenUserEvent.TryLoadingAgain -> {
                 loadData()
+            }
+            is RepositoryListScreenUserEvent.ToggleUiTheme -> viewModelScope.launch {
+                val newUiThemeMode = when (_state.value.uiThemeMode) {
+                    UiThemeMode.LIGHT -> UiThemeMode.DARK
+                    UiThemeMode.DARK -> UiThemeMode.LIGHT
+                }
+
+                userDataRepository.setUiThemeMode(uiThemeMode = newUiThemeMode)
             }
             else -> { /* no-op */ }
         }

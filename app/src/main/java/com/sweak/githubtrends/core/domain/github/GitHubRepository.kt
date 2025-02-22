@@ -1,4 +1,4 @@
-package com.sweak.githubtrends.core.domain
+package com.sweak.githubtrends.core.domain.github
 
 import com.sweak.githubtrends.core.domain.util.Result
 

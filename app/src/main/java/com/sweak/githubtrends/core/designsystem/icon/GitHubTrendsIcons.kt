@@ -3,6 +3,8 @@ package com.sweak.githubtrends.core.designsystem.icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.TrendingUp
 import androidx.compose.material.icons.automirrored.outlined.ArrowBackIos
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.runtime.Composable
@@ -18,4 +20,6 @@ object GitHubTrendsIcons {
     val Growth = Icons.AutoMirrored.Filled.TrendingUp
     val BackArrow = Icons.AutoMirrored.Outlined.ArrowBackIos
     val Error = Icons.Outlined.ErrorOutline
+    val LightMode = Icons.Filled.LightMode
+    val DarkMode = Icons.Filled.DarkMode
 }

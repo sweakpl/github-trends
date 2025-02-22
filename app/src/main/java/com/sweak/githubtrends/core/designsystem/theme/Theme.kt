@@ -1,12 +1,12 @@
 package com.sweak.githubtrends.core.designsystem.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import com.sweak.githubtrends.core.domain.user.UiThemeMode
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color.White,
@@ -30,13 +30,13 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun GitHubTrendsTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    uiThemeMode: UiThemeMode = UiThemeMode.LIGHT,
     content: @Composable () -> Unit
 ) {
     CompositionLocalProvider(LocalSpace provides Space()) {
-        val colorScheme = when {
-            darkTheme -> DarkColorScheme
-            else -> LightColorScheme
+        val colorScheme = when (uiThemeMode) {
+            UiThemeMode.LIGHT -> LightColorScheme
+            UiThemeMode.DARK -> DarkColorScheme
         }
 
         MaterialTheme(

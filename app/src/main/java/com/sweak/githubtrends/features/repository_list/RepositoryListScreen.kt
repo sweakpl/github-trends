@@ -15,6 +15,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
+import com.sweak.githubtrends.core.domain.user.UiThemeMode
 import com.sweak.githubtrends.core.ui.components.ErrorState
 import com.sweak.githubtrends.core.ui.util.UiState
 import com.sweak.githubtrends.features.repository_list.components.RepositoryCard
@@ -79,6 +81,24 @@ private fun RepositoryListScreenContent(
 
                         Text(
                             text = stringResource(R.string.trending)
+                        )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = { onEvent(RepositoryListScreenUserEvent.ToggleUiTheme) }
+                    ) {
+                        Icon(
+                            imageVector = when (state.uiThemeMode) {
+                                UiThemeMode.LIGHT -> GitHubTrendsIcons.DarkMode
+                                UiThemeMode.DARK -> GitHubTrendsIcons.LightMode
+                            },
+                            contentDescription = stringResource(
+                                when (state.uiThemeMode) {
+                                    UiThemeMode.LIGHT -> R.string.content_description_dark_mode
+                                    UiThemeMode.DARK -> R.string.content_description_light_mode
+                                }
+                            )
                         )
                     }
                 }
@@ -141,7 +161,7 @@ private fun RepositoryListScreenContent(
 @Preview
 @Composable
 private fun RepositoryListScreenContentPreview() {
-    GitHubTrendsTheme(darkTheme = true) {
+    GitHubTrendsTheme(uiThemeMode = UiThemeMode.DARK) {
         RepositoryListScreenContent(
             state = RepositoryListScreenState(
                 repositoriesUiState = UiState.Success(

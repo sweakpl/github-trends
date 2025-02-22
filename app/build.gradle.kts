@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.io.coil.compose)
     implementation(libs.kotlinx.serialization.json)
 
+    implementation(libs.androidx.datastore.preferences)
+
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

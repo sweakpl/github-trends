@@ -16,4 +16,6 @@
     <string name="content_description_error">Error icon</string>
     <string name="content_description_repository_owner_avatar">Avatar of the repository owner</string>
     <string name="content_description_fork">GitHub fork icon</string>
+    <string name="content_description_dark_mode">Dark mode icon</string>
+    <string name="content_description_light_mode">Light mode icon</string>
 </resources>
