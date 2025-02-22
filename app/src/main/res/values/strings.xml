@@ -8,6 +8,14 @@
     <string name="try_again">Try again</string>
     <string name="see_on_github">See on GitHub</string>
     <string name="issue_opening_the_page">There was an issue opening the page.</string>
+    <string name="stars">Stars</string>
+    <string name="language">Language</string>
+    <string name="forks">Forks</string>
+    <string name="watching">Watching</string>
+    <string name="issues">Issues</string>
+    <string name="license">License</string>
+    <string name="created_at_colon">Created at:</string>
+    <string name="updated_at_colon">Updated at:</string>
 
     <string name="content_description_star">Star icon</string>
     <string name="content_description_growth">Popularity growth icon</string>
@@ -18,4 +26,7 @@
     <string name="content_description_fork">GitHub fork icon</string>
     <string name="content_description_dark_mode">Dark mode icon</string>
     <string name="content_description_light_mode">Light mode icon</string>
+    <string name="content_description_watch">Watch icon</string>
+    <string name="content_description_issue">Issue icon</string>
+    <string name="content_description_license">License icon</string>
 </resources>

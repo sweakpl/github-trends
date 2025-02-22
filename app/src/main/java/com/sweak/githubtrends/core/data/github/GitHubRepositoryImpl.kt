@@ -8,6 +8,7 @@ import com.sweak.githubtrends.core.domain.util.Result
 import com.sweak.githubtrends.core.network.details.GitHubRepositoryDetailsNetwork
 import com.sweak.githubtrends.core.network.trending.GitHubTrendingRepositoriesNetwork
 import com.sweak.githubtrends.core.network.util.GitHubRepositoriesNetworkError
+import java.time.Instant
 import javax.inject.Inject
 
 class GitHubRepositoryImpl @Inject constructor(
@@ -48,8 +49,23 @@ class GitHubRepositoryImpl @Inject constructor(
     override suspend fun getRepositoryDetails(
         repositoryId: String
     ): Result<RepositoryDetails, GitHubError> {
+        val ownerName: String
+        val repositoryName: String
+
+        try {
+            repositoryId.split("/").let {
+                require(it.size == 2)
+
+                ownerName = it[0]
+                repositoryName = it[1]
+            }
+        } catch (illegalArgumentException: IllegalArgumentException) {
+            return Result.Error(GitHubError.UNKNOWN)
+        }
+
         val result = gitHubRepositoryDetailsNetwork.getRepositoryDetails(
-            repositoryId = repositoryId
+            repositoryOwnerName = ownerName,
+            repositoryName = repositoryName
         )
 
         when (result) {
@@ -71,10 +87,19 @@ class GitHubRepositoryImpl @Inject constructor(
                         name = result.data.name,
                         author = result.data.owner.login,
                         authorAvatarUrl = result.data.owner.avatarUrl,
+                        createdAt = result.data.createdAt?.let {
+                            Instant.parse(it).toEpochMilli()
+                        },
+                        updatedAt = result.data.updatedAt?.let {
+                            Instant.parse(it).toEpochMilli()
+                        },
                         description = result.data.description,
                         stars = result.data.stargazersCount,
                         language = result.data.language,
                         forks = result.data.forksCount,
+                        watchers = result.data.subscribersCount,
+                        openIssues = result.data.openIssues,
+                        license = result.data.license?.spdxId
                     )
                 )
             }

@@ -6,8 +6,13 @@ data class RepositoryDetails(
     val name: String,
     val author: String,
     val authorAvatarUrl: String,
+    val createdAt: Long?,
+    val updatedAt: Long?,
     val description: String?,
     val stars: Int,
     val language: String?,
-    val forks: Int
+    val forks: Int,
+    val watchers: Int,
+    val openIssues: Int,
+    val license: String?
 )

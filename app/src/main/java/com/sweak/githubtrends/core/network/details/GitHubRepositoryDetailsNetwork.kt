@@ -33,18 +33,14 @@ class GitHubRepositoryDetailsNetwork @Inject constructor() {
         .create(GitHubRepositoryDetailsApi::class.java)
 
     suspend fun getRepositoryDetails(
-        repositoryId: String
+        repositoryOwnerName: String,
+        repositoryName: String
     ): Result<GitHubRepositoryDetailsDto, GitHubRepositoriesNetworkError> {
         val response: Response<GitHubRepositoryDetailsDto>
 
         try {
-            val (ownerName, repositoryName) = repositoryId.split("/").let {
-                require(it.size == 2)
-                it[0] to it[1]
-            }
-
             response = gitHubRepositoryDetailsApi.getRepositoryDetails(
-                ownerName = ownerName,
+                ownerName = repositoryOwnerName,
                 repositoryName = repositoryName
             )
         } catch (exception: Exception) {

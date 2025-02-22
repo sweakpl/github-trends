@@ -61,10 +61,15 @@ class RepositoryDetailsViewModel @Inject constructor(
                             name = repositoryDetailsResult.data.name,
                             username = repositoryDetailsResult.data.author,
                             usernameAvatarUrl = repositoryDetailsResult.data.authorAvatarUrl,
+                            createdAt = repositoryDetailsResult.data.createdAt,
+                            updatedAt = repositoryDetailsResult.data.updatedAt,
                             description = repositoryDetailsResult.data.description,
                             totalStars = repositoryDetailsResult.data.stars,
                             language = repositoryDetailsResult.data.language,
                             forks = repositoryDetailsResult.data.forks,
+                            watchers = repositoryDetailsResult.data.watchers,
+                            openIssues = repositoryDetailsResult.data.openIssues,
+                            license = repositoryDetailsResult.data.license,
                             url = repositoryDetailsResult.data.url
                         )
                     )

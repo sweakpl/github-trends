@@ -48,7 +48,9 @@ import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.core.ui.components.ErrorState
 import com.sweak.githubtrends.core.ui.util.LanguageColors
 import com.sweak.githubtrends.core.ui.util.UiState
+import com.sweak.githubtrends.features.repository_details.components.StatCard
 import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
+import com.sweak.githubtrends.features.repository_details.util.getFormattedDate
 
 @Composable
 fun RepositoryDetailsScreen(
@@ -170,83 +172,156 @@ private fun RepositoryDetailsScreenContent(
                                 )
                             }
 
+                            if (repositoryDetailsUiState.data.createdAt != null) {
+                                Row(
+                                    modifier = Modifier.padding(bottom = MaterialTheme.space.xSmall)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.created_at_colon),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(end = MaterialTheme.space.small)
+                                    )
+
+                                    Text(
+                                        text = getFormattedDate(
+                                            timestamp = repositoryDetailsUiState.data.createdAt
+                                        ),
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+
+                            if (repositoryDetailsUiState.data.updatedAt != null) {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(bottom = MaterialTheme.space.mediumLarge)
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.updated_at_colon),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(end = MaterialTheme.space.small)
+                                    )
+
+                                    Text(
+                                        text = getFormattedDate(
+                                            timestamp = repositoryDetailsUiState.data.updatedAt
+                                        ),
+                                        fontWeight = FontWeight.SemiBold
+                                    )
+                                }
+                            }
+
                             FlowRow(
                                 horizontalArrangement =
-                                Arrangement.spacedBy(MaterialTheme.space.large),
+                                Arrangement.spacedBy(MaterialTheme.space.medium),
                                 verticalArrangement =
-                                Arrangement.spacedBy(MaterialTheme.space.smallMedium),
+                                Arrangement.spacedBy(MaterialTheme.space.medium),
                                 modifier = Modifier
-                                    .fillMaxWidth()
                                     .padding(bottom = MaterialTheme.space.mediumLarge)
+                                    .align(Alignment.CenterHorizontally)
                             ) {
-                                if (repositoryDetailsUiState.data.language != null) {
-                                    Row(
-                                        horizontalArrangement =
-                                        Arrangement.spacedBy(MaterialTheme.space.small),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        LanguageColors[repositoryDetailsUiState.data.language]?.let {
-                                            Box(
-                                                modifier = Modifier
-                                                    .size(
-                                                        size = MaterialTheme.space.run {
-                                                            medium + xSmall
-                                                        }
-                                                    )
-                                                    .clip(shape = CircleShape)
-                                                    .background(color = it)
-                                            )
-                                        }
-
-                                        Text(
-                                            text = repositoryDetailsUiState.data.language,
-                                            style = MaterialTheme.typography.headlineSmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                StatCard(
+                                    title = stringResource(R.string.stars),
+                                    icon = {
+                                        Icon(
+                                            imageVector = GitHubTrendsIcons.Star,
+                                            contentDescription = stringResource(
+                                                R.string.content_description_star
+                                            ),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(size = MaterialTheme.space.large)
                                         )
-                                    }
-                                }
+                                    },
+                                    value = repositoryDetailsUiState.data.totalStars.toString(),
+                                    modifier = Modifier.weight(1f)
+                                )
 
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        space = MaterialTheme.space.xSmall
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = GitHubTrendsIcons.Star,
-                                        contentDescription = stringResource(
-                                            R.string.content_description_star
-                                        ),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.size(size = MaterialTheme.space.large)
-                                    )
-
-                                    Text(
-                                        text = repositoryDetailsUiState.data.totalStars.toString(),
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                if (repositoryDetailsUiState.data.language != null) {
+                                    StatCard(
+                                        title = stringResource(R.string.language),
+                                        icon = {
+                                            LanguageColors[repositoryDetailsUiState.data.language]?.let {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .size(size = MaterialTheme.space.large)
+                                                        .clip(shape = CircleShape)
+                                                        .background(color = it)
+                                                )
+                                            }
+                                        },
+                                        value = repositoryDetailsUiState.data.language,
+                                        modifier = Modifier.weight(1f)
                                     )
                                 }
 
-                                Row(
-                                    horizontalArrangement = Arrangement.spacedBy(
-                                        space = MaterialTheme.space.xSmall
-                                    ),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = GitHubTrendsIcons.Fork,
-                                        contentDescription = stringResource(
-                                            R.string.content_description_fork
-                                        ),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.size(size = MaterialTheme.space.large)
-                                    )
+                                StatCard(
+                                    title = stringResource(R.string.forks),
+                                    icon = {
+                                        Icon(
+                                            imageVector = GitHubTrendsIcons.Fork,
+                                            contentDescription = stringResource(
+                                                R.string.content_description_fork
+                                            ),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(size = MaterialTheme.space.large)
+                                        )
+                                    },
+                                    value = repositoryDetailsUiState.data.forks.toString(),
+                                    modifier = Modifier.weight(1f)
+                                )
 
-                                    Text(
-                                        text = repositoryDetailsUiState.data.forks.toString(),
-                                        style = MaterialTheme.typography.headlineSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                StatCard(
+                                    title = stringResource(R.string.watching),
+                                    icon = {
+                                        Icon(
+                                            imageVector = GitHubTrendsIcons.Watch,
+                                            contentDescription = stringResource(
+                                                R.string.content_description_watch
+                                            ),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(size = MaterialTheme.space.large)
+                                        )
+                                    },
+                                    value = repositoryDetailsUiState.data.watchers.toString(),
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                StatCard(
+                                    title = stringResource(R.string.issues),
+                                    icon = {
+                                        Icon(
+                                            imageVector = GitHubTrendsIcons.Issue,
+                                            contentDescription = stringResource(
+                                                R.string.content_description_issue
+                                            ),
+                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier
+                                                .size(size = MaterialTheme.space.large)
+                                        )
+                                    },
+                                    value = repositoryDetailsUiState.data.openIssues.toString(),
+                                    modifier = Modifier.weight(1f)
+                                )
+
+                                if (repositoryDetailsUiState.data.license != null) {
+                                    StatCard(
+                                        title = stringResource(R.string.license),
+                                        icon = {
+                                            Icon(
+                                                imageVector = GitHubTrendsIcons.License,
+                                                contentDescription = stringResource(
+                                                    R.string.content_description_license
+                                                ),
+                                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                modifier = Modifier
+                                                    .size(size = MaterialTheme.space.large)
+                                            )
+                                        },
+                                        value = repositoryDetailsUiState.data.license,
+                                        modifier = Modifier.weight(1f)
                                     )
                                 }
                             }
@@ -319,10 +394,15 @@ private fun RepositoryDetailsScreenContentPreview() {
                         name = "qralarm-android",
                         username = "sweakpl",
                         usernameAvatarUrl = "https://avatars.githubusercontent.com/u/70141120?v=4",
+                        createdAt = 1647771066000,
+                        updatedAt = 1740168725000,
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
                         totalStars = 177,
                         language = "Kotlin",
                         forks = 14,
+                        watchers = 7,
+                        openIssues = 7,
+                        license = "GPL-3.0",
                         url = "https://github.com/sweakpl/qralarm-android"
                     )
                 )

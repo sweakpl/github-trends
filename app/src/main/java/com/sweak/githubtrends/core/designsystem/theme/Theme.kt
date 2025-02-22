@@ -10,6 +10,7 @@ import com.sweak.githubtrends.core.domain.user.UiThemeMode
 
 private val DarkColorScheme = darkColorScheme(
     primary = Color.White,
+    onPrimary = Bunker,
     background = Bunker,
     onBackground = Color.White,
     surface = Color.Black,
@@ -20,6 +21,7 @@ private val DarkColorScheme = darkColorScheme(
 
 private val LightColorScheme = lightColorScheme(
     primary = Bunker,
+    onPrimary = Color.White,
     background = Color.White,
     onBackground = Bunker,
     surface = AquaHaze,
