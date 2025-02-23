@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.io.coil.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.compose.material3.adaptive)
 
     implementation(libs.androidx.datastore.preferences)
 

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,14 +20,17 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
@@ -65,6 +69,8 @@ private fun RepositoryListScreenContent(
     state: RepositoryListScreenState,
     onEvent: (RepositoryListScreenUserEvent) -> Unit
 ) {
+    val windowSizeClass = currentWindowAdaptiveInfo()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -118,6 +124,7 @@ private fun RepositoryListScreenContent(
                         LazyColumn(
                             verticalArrangement = Arrangement
                                 .spacedBy(space = MaterialTheme.space.medium),
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             contentPadding = PaddingValues(all = MaterialTheme.space.medium)
                         ) {
                             items(
@@ -132,7 +139,15 @@ private fun RepositoryListScreenContent(
                                                 repositoryId = repositoryId
                                             )
                                         )
-                                    }
+                                    },
+                                    modifier = Modifier
+                                        .fillMaxWidth(
+                                            when (windowSizeClass.windowSizeClass.windowWidthSizeClass) {
+                                                WindowWidthSizeClass.EXPANDED -> 0.6f
+                                                WindowWidthSizeClass.MEDIUM -> 0.8f
+                                                else -> 1f
+                                            }
+                                        )
                                 )
                             }
                         }
@@ -161,6 +176,7 @@ private fun RepositoryListScreenContent(
     }
 }
 
+@PreviewScreenSizes
 @Preview
 @Composable
 private fun RepositoryListScreenContentPreview() {
@@ -170,7 +186,7 @@ private fun RepositoryListScreenContentPreview() {
                 repositoriesUiState = UiState.Success(
                     listOf(
                         RepositoryPreviewWrapper(
-                            id = "sweakpl/qralarm-android",
+                            id = "sweakpl/qralarm-android1",
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -179,7 +195,7 @@ private fun RepositoryListScreenContentPreview() {
                             starsSince = 3
                         ),
                         RepositoryPreviewWrapper(
-                            id = "sweakpl/qralarm-android",
+                            id = "sweakpl/qralarm-android2",
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
@@ -188,7 +204,7 @@ private fun RepositoryListScreenContentPreview() {
                             starsSince = 3
                         ),
                         RepositoryPreviewWrapper(
-                            id = "sweakpl/qralarm-android",
+                            id = "sweakpl/qralarm-android3",
                             name = "qralarm-android",
                             username = "sweakpl",
                             description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
