@@ -120,7 +120,10 @@ private fun RepositoryListScreenContent(
                                 .spacedBy(space = MaterialTheme.space.medium),
                             contentPadding = PaddingValues(all = MaterialTheme.space.medium)
                         ) {
-                            items(repositoriesUiState.data) { repositoryPreviewWrapper ->
+                            items(
+                                repositoriesUiState.data,
+                                key = { it.id }
+                            ) { repositoryPreviewWrapper ->
                                 RepositoryCard(
                                     repositoryPreviewWrapper = repositoryPreviewWrapper,
                                     onClick = { repositoryId ->
