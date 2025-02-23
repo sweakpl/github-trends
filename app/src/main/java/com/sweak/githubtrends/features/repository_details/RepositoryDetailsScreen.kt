@@ -5,21 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,29 +23,28 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.core.ui.components.ErrorState
-import com.sweak.githubtrends.core.ui.util.LanguageColors
 import com.sweak.githubtrends.core.ui.util.UiState
-import com.sweak.githubtrends.features.repository_details.components.StatCard
+import com.sweak.githubtrends.features.repository_details.components.RepositoryDescription
+import com.sweak.githubtrends.features.repository_details.components.RepositoryStatCards
+import com.sweak.githubtrends.features.repository_details.components.SeeOnGitHubButton
 import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
-import com.sweak.githubtrends.features.repository_details.util.getFormattedDate
 
 @Composable
 fun RepositoryDetailsScreen(
@@ -92,12 +86,14 @@ fun RepositoryDetailsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RepositoryDetailsScreenContent(
     state: RepositoryDetailsScreenState,
     onEvent: (RepositoryDetailsScreenUserEvent) -> Unit
 ) {
+    val windowSizeClass = currentWindowAdaptiveInfo()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -129,235 +125,43 @@ private fun RepositoryDetailsScreenContent(
             ) { repositoryDetailsUiState ->
                 when (repositoryDetailsUiState) {
                     is UiState.Success -> {
-                        Column(
+                        Box(
                             modifier = Modifier
                                 .verticalScroll(rememberScrollState())
-                                .padding(all = MaterialTheme.space.medium)
+                                .padding(all = MaterialTheme.space.mediumLarge),
+                            contentAlignment = Alignment.TopCenter
                         ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier.padding(bottom = MaterialTheme.space.small)
-                            ) {
-                                AsyncImage(
-                                    model = repositoryDetailsUiState.data.usernameAvatarUrl,
-                                    contentDescription = stringResource(
-                                        R.string.content_description_repository_owner_avatar
-                                    ),
-                                    modifier = Modifier.size(size = MaterialTheme.space.large)
-                                )
-
-                                Text(
-                                    text = repositoryDetailsUiState.data.username,
-                                    style = MaterialTheme.typography.headlineSmall,
-                                    modifier = Modifier.padding(start = MaterialTheme.space.small)
-                                )
-                            }
-
-                            Text(
-                                text = repositoryDetailsUiState.data.name,
-                                style = MaterialTheme.typography.headlineSmall.copy(
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 28.sp
-                                ),
-                                modifier = Modifier
-                                    .padding(bottom = MaterialTheme.space.mediumLarge)
-                            )
-
-                            if (repositoryDetailsUiState.data.description != null) {
-                                Text(
-                                    text = repositoryDetailsUiState.data.description,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(bottom = MaterialTheme.space.medium),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
-                            }
-
-                            if (repositoryDetailsUiState.data.createdAt != null) {
-                                Row(
-                                    modifier = Modifier.padding(bottom = MaterialTheme.space.xSmall)
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.created_at_colon),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(end = MaterialTheme.space.small)
-                                    )
-
-                                    Text(
-                                        text = getFormattedDate(
-                                            timestamp = repositoryDetailsUiState.data.createdAt
-                                        ),
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                            }
-
-                            if (repositoryDetailsUiState.data.updatedAt != null) {
-                                Row(
-                                    modifier = Modifier
-                                        .padding(bottom = MaterialTheme.space.mediumLarge)
-                                ) {
-                                    Text(
-                                        text = stringResource(R.string.updated_at_colon),
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        modifier = Modifier.padding(end = MaterialTheme.space.small)
-                                    )
-
-                                    Text(
-                                        text = getFormattedDate(
-                                            timestamp = repositoryDetailsUiState.data.updatedAt
-                                        ),
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                }
-                            }
-
-                            FlowRow(
-                                horizontalArrangement =
-                                Arrangement.spacedBy(MaterialTheme.space.medium),
-                                verticalArrangement =
-                                Arrangement.spacedBy(MaterialTheme.space.medium),
-                                modifier = Modifier
-                                    .padding(bottom = MaterialTheme.space.mediumLarge)
-                                    .align(Alignment.CenterHorizontally)
-                            ) {
-                                StatCard(
-                                    title = stringResource(R.string.stars),
-                                    icon = {
-                                        Icon(
-                                            imageVector = GitHubTrendsIcons.Star,
-                                            contentDescription = stringResource(
-                                                R.string.content_description_star
-                                            ),
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier
-                                                .size(size = MaterialTheme.space.large)
-                                        )
-                                    },
-                                    value = repositoryDetailsUiState.data.totalStars.toString(),
-                                    modifier = Modifier.weight(1f)
-                                )
-
-                                if (repositoryDetailsUiState.data.language != null) {
-                                    StatCard(
-                                        title = stringResource(R.string.language),
-                                        icon = {
-                                            LanguageColors[repositoryDetailsUiState.data.language]?.let {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .size(size = MaterialTheme.space.large)
-                                                        .clip(shape = CircleShape)
-                                                        .background(color = it)
-                                                )
-                                            }
-                                        },
-                                        value = repositoryDetailsUiState.data.language,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-
-                                StatCard(
-                                    title = stringResource(R.string.forks),
-                                    icon = {
-                                        Icon(
-                                            imageVector = GitHubTrendsIcons.Fork,
-                                            contentDescription = stringResource(
-                                                R.string.content_description_fork
-                                            ),
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier
-                                                .size(size = MaterialTheme.space.large)
-                                        )
-                                    },
-                                    value = repositoryDetailsUiState.data.forks.toString(),
-                                    modifier = Modifier.weight(1f)
-                                )
-
-                                StatCard(
-                                    title = stringResource(R.string.watching),
-                                    icon = {
-                                        Icon(
-                                            imageVector = GitHubTrendsIcons.Watch,
-                                            contentDescription = stringResource(
-                                                R.string.content_description_watch
-                                            ),
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier
-                                                .size(size = MaterialTheme.space.large)
-                                        )
-                                    },
-                                    value = repositoryDetailsUiState.data.watchers.toString(),
-                                    modifier = Modifier.weight(1f)
-                                )
-
-                                StatCard(
-                                    title = stringResource(R.string.issues),
-                                    icon = {
-                                        Icon(
-                                            imageVector = GitHubTrendsIcons.Issue,
-                                            contentDescription = stringResource(
-                                                R.string.content_description_issue
-                                            ),
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            modifier = Modifier
-                                                .size(size = MaterialTheme.space.large)
-                                        )
-                                    },
-                                    value = repositoryDetailsUiState.data.openIssues.toString(),
-                                    modifier = Modifier.weight(1f)
-                                )
-
-                                if (repositoryDetailsUiState.data.license != null) {
-                                    StatCard(
-                                        title = stringResource(R.string.license),
-                                        icon = {
-                                            Icon(
-                                                imageVector = GitHubTrendsIcons.License,
-                                                contentDescription = stringResource(
-                                                    R.string.content_description_license
-                                                ),
-                                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                modifier = Modifier
-                                                    .size(size = MaterialTheme.space.large)
+                            if (windowSizeClass.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.EXPANDED) {
+                                CompactMediumRepositoryDetails(
+                                    repositoryDetailsUiState = repositoryDetailsUiState,
+                                    onOpenGitHubClicked = {
+                                        onEvent(
+                                            RepositoryDetailsScreenUserEvent.OpenGitHubClicked(
+                                                repositoryUrl = repositoryDetailsUiState.data.url
                                             )
-                                        },
-                                        value = repositoryDetailsUiState.data.license,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                            }
-
-                            Button(
-                                onClick = {
-                                    onEvent(
-                                        RepositoryDetailsScreenUserEvent.OpenGitHubClicked(
-                                            repositoryUrl = repositoryDetailsUiState.data.url
                                         )
+                                    },
+                                    modifier = Modifier.fillMaxWidth(
+                                        if (windowSizeClass.windowSizeClass.windowWidthSizeClass != WindowWidthSizeClass.COMPACT) {
+                                            0.8f
+                                        } else 1f
                                     )
-                                },
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                Row(
-                                    horizontalArrangement =
-                                    Arrangement.spacedBy(MaterialTheme.space.smallMedium),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Icon(
-                                        imageVector = GitHubTrendsIcons.GitHub,
-                                        contentDescription =
-                                        stringResource(R.string.content_description_github),
-                                        modifier = Modifier
-                                            .size(size = MaterialTheme.space.large)
-                                    )
-
-                                    Text(
-                                        text = stringResource(R.string.see_on_github),
-                                        style = MaterialTheme.typography.titleMedium
-                                    )
-                                }
+                                )
+                            } else {
+                                ExpandedRepositoryDetails(
+                                    repositoryDetailsUiState = repositoryDetailsUiState,
+                                    onOpenGitHubClicked = {
+                                        onEvent(
+                                            RepositoryDetailsScreenUserEvent.OpenGitHubClicked(
+                                                repositoryUrl = repositoryDetailsUiState.data.url
+                                            )
+                                        )
+                                    },
+                                    modifier = Modifier.fillMaxWidth(0.8f)
+                                )
                             }
                         }
                     }
-
                     is UiState.Loading -> {
                         Box(modifier = Modifier.size(size = MaterialTheme.space.xLarge)) {
                             CircularProgressIndicator(
@@ -365,7 +169,6 @@ private fun RepositoryDetailsScreenContent(
                             )
                         }
                     }
-
                     is UiState.Error -> {
                         ErrorState(
                             errorMessage = repositoryDetailsUiState.errorMessage.asString(),
@@ -383,6 +186,54 @@ private fun RepositoryDetailsScreenContent(
     }
 }
 
+@Composable
+private fun CompactMediumRepositoryDetails(
+    repositoryDetailsUiState: UiState.Success<RepositoryDetailsWrapper>,
+    onOpenGitHubClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        RepositoryDescription(
+            repositoryDetailsUiState = repositoryDetailsUiState,
+            modifier = Modifier.padding(bottom = MaterialTheme.space.mediumLarge)
+        )
+
+        RepositoryStatCards(
+            repositoryStats = repositoryDetailsUiState.data.repositoryStats,
+            modifier = Modifier.padding(bottom = MaterialTheme.space.mediumLarge)
+        )
+
+        SeeOnGitHubButton(onClick = onOpenGitHubClicked)
+    }
+}
+
+@Composable
+private fun ExpandedRepositoryDetails(
+    repositoryDetailsUiState: UiState.Success<RepositoryDetailsWrapper>,
+    onOpenGitHubClicked: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(MaterialTheme.space.large),
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            RepositoryDescription(
+                repositoryDetailsUiState = repositoryDetailsUiState,
+                modifier = Modifier.padding(bottom = MaterialTheme.space.mediumLarge)
+            )
+
+            SeeOnGitHubButton(onClick = onOpenGitHubClicked)
+        }
+
+        RepositoryStatCards(
+            repositoryStats = repositoryDetailsUiState.data.repositoryStats,
+            modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@PreviewScreenSizes
 @Preview
 @Composable
 private fun RepositoryDetailsScreenContentPreview() {
@@ -397,13 +248,15 @@ private fun RepositoryDetailsScreenContentPreview() {
                         createdAt = 1647771066000,
                         updatedAt = 1740168725000,
                         description = "QRAlarm is an Android alarm clock application that lets the user turn off alarms by scanning the QR Code.",
-                        totalStars = 177,
-                        language = "Kotlin",
-                        forks = 14,
-                        watchers = 7,
-                        openIssues = 7,
-                        license = "GPL-3.0",
-                        url = "https://github.com/sweakpl/qralarm-android"
+                        url = "https://github.com/sweakpl/qralarm-android",
+                        repositoryStats = listOf(
+                            RepositoryDetailsWrapper.SingleStatWrapper.Stars(177),
+                            RepositoryDetailsWrapper.SingleStatWrapper.Language("Kotlin"),
+                            RepositoryDetailsWrapper.SingleStatWrapper.Forks(14),
+                            RepositoryDetailsWrapper.SingleStatWrapper.Watchers(7),
+                            RepositoryDetailsWrapper.SingleStatWrapper.Issues(7),
+                            RepositoryDetailsWrapper.SingleStatWrapper.License("GPL-3.0")
+                        )
                     )
                 )
             ),

@@ -11,6 +11,7 @@ import com.sweak.githubtrends.core.domain.util.Result
 import com.sweak.githubtrends.core.ui.util.UiState
 import com.sweak.githubtrends.core.ui.util.UiText
 import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
+import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper.SingleStatWrapper
 import com.sweak.githubtrends.features.repository_details.navigation.RepositoryDetailsRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -64,13 +65,35 @@ class RepositoryDetailsViewModel @Inject constructor(
                             createdAt = repositoryDetailsResult.data.createdAt,
                             updatedAt = repositoryDetailsResult.data.updatedAt,
                             description = repositoryDetailsResult.data.description,
-                            totalStars = repositoryDetailsResult.data.stars,
-                            language = repositoryDetailsResult.data.language,
-                            forks = repositoryDetailsResult.data.forks,
-                            watchers = repositoryDetailsResult.data.watchers,
-                            openIssues = repositoryDetailsResult.data.openIssues,
-                            license = repositoryDetailsResult.data.license,
-                            url = repositoryDetailsResult.data.url
+                            url = repositoryDetailsResult.data.url,
+                            repositoryStats = buildList {
+                                add(
+                                    SingleStatWrapper.Stars(
+                                        starsAmount = repositoryDetailsResult.data.stars
+                                    )
+                                )
+                                repositoryDetailsResult.data.language?.let {
+                                    add(SingleStatWrapper.Language(languageName = it))
+                                }
+                                add(
+                                    SingleStatWrapper.Forks(
+                                        forksAmount = repositoryDetailsResult.data.forks
+                                    )
+                                )
+                                add(
+                                    SingleStatWrapper.Watchers(
+                                        watchersAmount = repositoryDetailsResult.data.watchers
+                                    )
+                                )
+                                add(
+                                    SingleStatWrapper.Issues(
+                                        openIssuesAmount = repositoryDetailsResult.data.openIssues
+                                    )
+                                )
+                                repositoryDetailsResult.data.license?.let {
+                                    add(SingleStatWrapper.License(licenseName = it))
+                                }
+                            }
                         )
                     )
                 )
