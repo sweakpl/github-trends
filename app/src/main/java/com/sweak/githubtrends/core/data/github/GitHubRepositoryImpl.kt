@@ -99,7 +99,9 @@ class GitHubRepositoryImpl @Inject constructor(
                         forks = result.data.forksCount,
                         watchers = result.data.subscribersCount,
                         openIssues = result.data.openIssues,
-                        license = result.data.license?.spdxId
+                        license = result.data.license?.spdxId?.run {
+                            if (this == "NOASSERTION") "Other" else this
+                        }
                     )
                 )
             }
