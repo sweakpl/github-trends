@@ -1,5 +1,9 @@
 package com.sweak.githubtrends.features.repository_details.components
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,8 +18,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -26,6 +36,7 @@ import com.sweak.githubtrends.core.designsystem.icon.GitHubTrendsIcons
 import com.sweak.githubtrends.core.designsystem.theme.GitHubTrendsTheme
 import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.core.domain.user.UiThemeMode
+import kotlinx.coroutines.delay
 
 @Composable
 fun StatCard(
@@ -74,6 +85,49 @@ fun StatCard(
         }
     }
 }
+
+@Composable
+fun AnimatedStatCard(
+    title: String,
+    icon: @Composable () -> Unit,
+    value: String,
+    index: Int = 0,
+    modifier: Modifier = Modifier
+) {
+    var visible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(index * 50L)
+        visible = true
+    }
+
+    val animatedScale by animateFloatAsState(
+        targetValue = if (visible) 1f else 0.8f,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "scaleAnimation"
+    )
+
+    val animatedAlpha by animateFloatAsState(
+        targetValue = if (visible) 1f else 0f,
+        animationSpec = tween(durationMillis = 200),
+        label = "alphaAnimation"
+    )
+
+    StatCard(
+        title = title,
+        icon = icon,
+        value = value,
+        modifier = modifier.graphicsLayer {
+            scaleX = animatedScale
+            scaleY = animatedScale
+            alpha = animatedAlpha
+        }
+    )
+}
+
 
 @Preview
 @Composable

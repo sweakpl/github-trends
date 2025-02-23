@@ -1,6 +1,10 @@
 package com.sweak.githubtrends.features.repository_list
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,6 +42,7 @@ import com.sweak.githubtrends.core.designsystem.theme.space
 import com.sweak.githubtrends.core.domain.user.UiThemeMode
 import com.sweak.githubtrends.core.ui.components.ErrorState
 import com.sweak.githubtrends.core.ui.util.UiState
+import com.sweak.githubtrends.features.repository_list.components.AnimatedThemeIcon
 import com.sweak.githubtrends.features.repository_list.components.RepositoryCard
 import com.sweak.githubtrends.features.repository_list.model.RepositoryPreviewWrapper
 
@@ -91,22 +96,10 @@ private fun RepositoryListScreenContent(
                     }
                 },
                 actions = {
-                    IconButton(
+                    AnimatedThemeIcon(
+                        uiThemeMode = state.uiThemeMode,
                         onClick = { onEvent(RepositoryListScreenUserEvent.ToggleUiTheme) }
-                    ) {
-                        Icon(
-                            imageVector = when (state.uiThemeMode) {
-                                UiThemeMode.LIGHT -> GitHubTrendsIcons.DarkMode
-                                UiThemeMode.DARK -> GitHubTrendsIcons.LightMode
-                            },
-                            contentDescription = stringResource(
-                                when (state.uiThemeMode) {
-                                    UiThemeMode.LIGHT -> R.string.content_description_dark_mode
-                                    UiThemeMode.DARK -> R.string.content_description_light_mode
-                                }
-                            )
-                        )
-                    }
+                    )
                 }
             )
         }
@@ -125,7 +118,10 @@ private fun RepositoryListScreenContent(
                             verticalArrangement = Arrangement
                                 .spacedBy(space = MaterialTheme.space.medium),
                             horizontalAlignment = Alignment.CenterHorizontally,
-                            contentPadding = PaddingValues(all = MaterialTheme.space.medium)
+                            contentPadding = PaddingValues(all = MaterialTheme.space.medium),
+                            modifier = Modifier.animateEnterExit(
+                                enter = slideInVertically()
+                            )
                         ) {
                             items(
                                 repositoriesUiState.data,

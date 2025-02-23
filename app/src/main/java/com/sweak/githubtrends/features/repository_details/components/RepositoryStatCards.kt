@@ -44,10 +44,10 @@ fun RepositoryStatCards(
         maxItemsInEachRow = maxItemsInRow,
         modifier = modifier
     ) {
-        repositoryStats.forEach { statWrapper ->
+        repositoryStats.forEachIndexed { index, statWrapper ->
             when (statWrapper) {
                 is RepositoryDetailsWrapper.SingleStatWrapper.Stars -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.stars),
                         icon = {
                             Icon(
@@ -61,11 +61,12 @@ fun RepositoryStatCards(
                             )
                         },
                         value = statWrapper.starsAmount.toString(),
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 is RepositoryDetailsWrapper.SingleStatWrapper.Language -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.language),
                         icon = {
                             LanguageColors[statWrapper.languageName]?.let {
@@ -78,11 +79,12 @@ fun RepositoryStatCards(
                             }
                         },
                         value = statWrapper.languageName,
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 is RepositoryDetailsWrapper.SingleStatWrapper.Forks -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.forks),
                         icon = {
                             Icon(
@@ -96,11 +98,12 @@ fun RepositoryStatCards(
                             )
                         },
                         value = statWrapper.forksAmount.toString(),
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 is RepositoryDetailsWrapper.SingleStatWrapper.Watchers -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.watching),
                         icon = {
                             Icon(
@@ -114,11 +117,12 @@ fun RepositoryStatCards(
                             )
                         },
                         value = statWrapper.watchersAmount.toString(),
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 is RepositoryDetailsWrapper.SingleStatWrapper.Issues -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.issues),
                         icon = {
                             Icon(
@@ -132,11 +136,12 @@ fun RepositoryStatCards(
                             )
                         },
                         value = statWrapper.openIssuesAmount.toString(),
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 is RepositoryDetailsWrapper.SingleStatWrapper.License -> {
-                    StatCard(
+                    AnimatedStatCard(
                         title = stringResource(R.string.license),
                         icon = {
                             Icon(
@@ -150,6 +155,7 @@ fun RepositoryStatCards(
                             )
                         },
                         value = statWrapper.licenseName,
+                        index = index,
                         modifier = Modifier.weight(1f)
                     )
                 }
