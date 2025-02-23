@@ -196,7 +196,7 @@ private fun CompactMediumRepositoryDetails(
         RepositoryDescription(
             name = repositoryDetailsUiState.data.name,
             userName = repositoryDetailsUiState.data.userName,
-            usernameAvatarUrl = repositoryDetailsUiState.data.url,
+            usernameAvatarUrl = repositoryDetailsUiState.data.usernameAvatarUrl,
             description = repositoryDetailsUiState.data.description,
             createdAt = repositoryDetailsUiState.data.createdAt,
             updatedAt = repositoryDetailsUiState.data.updatedAt,
@@ -226,7 +226,7 @@ private fun ExpandedRepositoryDetails(
             RepositoryDescription(
                 name = repositoryDetailsUiState.data.name,
                 userName = repositoryDetailsUiState.data.userName,
-                usernameAvatarUrl = repositoryDetailsUiState.data.url,
+                usernameAvatarUrl = repositoryDetailsUiState.data.usernameAvatarUrl,
                 description = repositoryDetailsUiState.data.description,
                 createdAt = repositoryDetailsUiState.data.createdAt,
                 updatedAt = repositoryDetailsUiState.data.updatedAt,
