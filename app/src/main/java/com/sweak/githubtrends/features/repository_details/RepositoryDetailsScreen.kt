@@ -194,7 +194,12 @@ private fun CompactMediumRepositoryDetails(
 ) {
     Column(modifier = modifier) {
         RepositoryDescription(
-            repositoryDetailsUiState = repositoryDetailsUiState,
+            name = repositoryDetailsUiState.data.name,
+            userName = repositoryDetailsUiState.data.userName,
+            usernameAvatarUrl = repositoryDetailsUiState.data.url,
+            description = repositoryDetailsUiState.data.description,
+            createdAt = repositoryDetailsUiState.data.createdAt,
+            updatedAt = repositoryDetailsUiState.data.updatedAt,
             modifier = Modifier.padding(bottom = MaterialTheme.space.mediumLarge)
         )
 
@@ -219,7 +224,12 @@ private fun ExpandedRepositoryDetails(
     ) {
         Column(modifier = Modifier.weight(1f)) {
             RepositoryDescription(
-                repositoryDetailsUiState = repositoryDetailsUiState,
+                name = repositoryDetailsUiState.data.name,
+                userName = repositoryDetailsUiState.data.userName,
+                usernameAvatarUrl = repositoryDetailsUiState.data.url,
+                description = repositoryDetailsUiState.data.description,
+                createdAt = repositoryDetailsUiState.data.createdAt,
+                updatedAt = repositoryDetailsUiState.data.updatedAt,
                 modifier = Modifier.padding(bottom = MaterialTheme.space.mediumLarge)
             )
 
@@ -243,7 +253,7 @@ private fun RepositoryDetailsScreenContentPreview() {
                 repositoryDetailsUiState = UiState.Success(
                     RepositoryDetailsWrapper(
                         name = "qralarm-android",
-                        username = "sweakpl",
+                        userName = "sweakpl",
                         usernameAvatarUrl = "https://avatars.githubusercontent.com/u/70141120?v=4",
                         createdAt = 1647771066000,
                         updatedAt = 1740168725000,

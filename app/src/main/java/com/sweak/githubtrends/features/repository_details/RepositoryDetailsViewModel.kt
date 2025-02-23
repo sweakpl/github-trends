@@ -60,7 +60,7 @@ class RepositoryDetailsViewModel @Inject constructor(
                     repositoryDetailsUiState = UiState.Success(
                         RepositoryDetailsWrapper(
                             name = repositoryDetailsResult.data.name,
-                            username = repositoryDetailsResult.data.author,
+                            userName = repositoryDetailsResult.data.author,
                             usernameAvatarUrl = repositoryDetailsResult.data.authorAvatarUrl,
                             createdAt = repositoryDetailsResult.data.createdAt,
                             updatedAt = repositoryDetailsResult.data.updatedAt,

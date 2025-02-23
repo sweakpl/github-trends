@@ -15,13 +15,16 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sweak.githubtrends.R
 import com.sweak.githubtrends.core.designsystem.theme.space
-import com.sweak.githubtrends.core.ui.util.UiState
-import com.sweak.githubtrends.features.repository_details.model.RepositoryDetailsWrapper
 import com.sweak.githubtrends.features.repository_details.util.getFormattedDate
 
 @Composable
 fun RepositoryDescription(
-    repositoryDetailsUiState: UiState.Success<RepositoryDetailsWrapper>,
+    name: String,
+    userName: String,
+    usernameAvatarUrl: String,
+    description: String?,
+    createdAt: Long?,
+    updatedAt: Long?,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -30,7 +33,7 @@ fun RepositoryDescription(
             modifier = Modifier.padding(bottom = MaterialTheme.space.small)
         ) {
             AsyncImage(
-                model = repositoryDetailsUiState.data.usernameAvatarUrl,
+                model = usernameAvatarUrl,
                 contentDescription = stringResource(
                     R.string.content_description_repository_owner_avatar
                 ),
@@ -38,14 +41,14 @@ fun RepositoryDescription(
             )
 
             Text(
-                text = repositoryDetailsUiState.data.username,
+                text = userName,
                 style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = MaterialTheme.space.small)
             )
         }
 
         Text(
-            text = repositoryDetailsUiState.data.name,
+            text = name,
             style = MaterialTheme.typography.headlineSmall.copy(
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 28.sp
@@ -54,16 +57,16 @@ fun RepositoryDescription(
                 .padding(bottom = MaterialTheme.space.mediumLarge)
         )
 
-        if (repositoryDetailsUiState.data.description != null) {
+        if (description != null) {
             Text(
-                text = repositoryDetailsUiState.data.description,
+                text = description,
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(bottom = MaterialTheme.space.medium),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
 
-        if (repositoryDetailsUiState.data.createdAt != null) {
+        if (createdAt != null) {
             Row(
                 modifier = Modifier.padding(bottom = MaterialTheme.space.xSmall)
             ) {
@@ -75,14 +78,14 @@ fun RepositoryDescription(
 
                 Text(
                     text = getFormattedDate(
-                        timestamp = repositoryDetailsUiState.data.createdAt
+                        timestamp = createdAt
                     ),
                     fontWeight = FontWeight.SemiBold
                 )
             }
         }
 
-        if (repositoryDetailsUiState.data.updatedAt != null) {
+        if (updatedAt != null) {
             Row {
                 Text(
                     text = stringResource(R.string.updated_at_colon),
@@ -92,7 +95,7 @@ fun RepositoryDescription(
 
                 Text(
                     text = getFormattedDate(
-                        timestamp = repositoryDetailsUiState.data.updatedAt
+                        timestamp = updatedAt
                     ),
                     fontWeight = FontWeight.SemiBold
                 )
